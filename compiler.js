@@ -76,14 +76,46 @@ Calculator.prototype.parseA = function () {
   }
 };
 
+Calculator.prototype.parseFactor = function(name, value) {
+  return new TreeNode(name, value);
+}
+
+Calculator.prototype.parseB = function() {
+
+}
+
+
+
 Calculator.prototype.parseTerm = function () {
   var nextToken = this.peek();
+  var val = null;
+  if (nextToken) {
+    val = nextToken.value;
+  }
+
+  var factor = this.parseFactor("Factor", val);
   if(nextToken && nextToken.name == "NUMBER"){
     this.get();
-    return new TreeNode("Term", )
+    return new TreeNode("Term", factor)
   }
 }
 
 var test = new Calculator("5+6");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
