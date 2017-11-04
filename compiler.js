@@ -26,7 +26,7 @@ Calculator.prototype.lexer = function(inputString) {
       var result = regex.exec(inputString);
 
       if(result !== null) {
-        matched = true;    
+        matched = true;
         tokens.push({name: token, value: result[0]});
         inputString = inputString.slice(result[0].length)
       }
@@ -51,8 +51,38 @@ Calculator.prototype.get = function() {
   return this.tokenStream.shift();
 }
 
+function TreeNode(name, ...children) {
+  this.name = name;
+  this.children = children;
+}
 
+Calculator.prototype.parseExpression = function () {
+  var term = this.parseTerm();
+  var a = this.parseA();
 
+  return new TreeNode("Expression", term, a);
+};
+
+Calculator.prototype.parseA = function () {
+  var nextToken = this.peek();
+  if(nextToken && nextToken.name === "ADD") {
+    this.get();
+    return new TreeNode("A", "+", this.parseTerm(), this.parseA());
+  } else if(nextToken && nextToken.name == "SUB") {
+    this.get();
+    return new TreeNode("A", "-", this.parseTerm(), this.parseA());
+  } else {
+    return new TreeNode("A")
+  }
+};
+
+Calculator.prototype.parseTerm = function () {
+  var nextToken = this.peek();
+  if(nextToken && nextToken.name == "NUMBER"){
+    this.get();
+    return new TreeNode("Term", )
+  }
+}
 
 var test = new Calculator("5+6");
 
